@@ -1,4 +1,4 @@
-﻿namespace PaymentFlow.Domain.Entitie
+﻿namespace PaymentFlow.Domain.Entities
 {
     public class Pagamento
     {
