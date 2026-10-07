@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Itens de Solução/">
+    <File Path="global.json" />
+  </Folder>
   <Project Path="PaymentFlow.Api/PaymentFlow.Api.csproj" />
   <Project Path="PaymentFlow.Application/PaymentFlow.Application.csproj" />
   <Project Path="PaymentFlow.Domain/PaymentFlow.Domain.csproj" />
