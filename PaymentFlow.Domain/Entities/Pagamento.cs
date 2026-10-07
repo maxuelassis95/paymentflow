@@ -8,8 +8,7 @@ namespace PaymentFlow.Domain.Entities
         public decimal Valor { get; set; }
         public StatusPagamento Status { get; set; }
         public int ClienteId { get; set; }
-        [ForeignKey("ClienteId")]
-        public virtual Cliente Cliente { get; set; }
+        public Cliente Cliente { get; set; }
 
         public Pagamento(int id, DateTime dataCriacao, decimal valor, StatusPagamento status) : base(id, dataCriacao)  
         {
