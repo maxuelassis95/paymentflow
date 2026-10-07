@@ -1,6 +1,8 @@
-﻿namespace PaymentFlow.Infra.Data
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace PaymentFlow.Infra.Data
 {
-    public class PaymentFlowContext
+    public class PaymentFlowContext : DbContext
     {
 
     }
