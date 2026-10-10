@@ -1,5 +1,8 @@
 <Solution>
   <Folder Name="/Itens de Solução/">
+    <File Path=".env" />
+    <File Path=".env.example" />
+    <File Path="docker-compose.yaml" />
     <File Path="global.json" />
   </Folder>
   <Project Path="PaymentFlow.Api/PaymentFlow.Api.csproj" />

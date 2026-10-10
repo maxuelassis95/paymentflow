@@ -7,3 +7,5 @@
 # Pastas de compilação do .NET
 bin/
 obj/
+
+.env
