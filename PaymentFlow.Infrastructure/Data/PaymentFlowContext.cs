@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Runtime.ConstrainedExecution;
+using Microsoft.EntityFrameworkCore;
 using PaymentFlow.Domain.Entities;
 
 namespace PaymentFlow.Infrastructure.Data
@@ -31,6 +32,11 @@ namespace PaymentFlow.Infrastructure.Data
 
 
                 // 1 Cliente => N Pagamentos
+
+                //HasMany: um cliente pode ter vários pagamentos.
+                //WithOne: cada pagamento está associado a um cliente.
+                //HasForeignKey: ClienteId é a chave estrangeira.
+                //OnDelete(DeleteBehavior.Cascade): ao excluir um cliente, seus pagamentos relacionados também poderão ser excluídos.
                 entity.HasMany(c => c.Pagamentos)
                       .WithOne(p => p.Cliente)
                       .HasForeignKey(p => p.ClienteId)
