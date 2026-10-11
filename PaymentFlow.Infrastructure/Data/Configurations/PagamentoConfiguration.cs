@@ -10,8 +10,8 @@ namespace PaymentFlow.Infrastructure.Data.Configurations
         {
             builder.ToTable("pagamentos");
             builder.HasKey(p => p.Id);
-            builder.Property(p => p.Cliente).IsRequired();
-            builder.Property(p => p.Valor).HasColumnType("decimal(10:2)").IsRequired();
+            builder.Property(p => p.ClienteId).IsRequired();
+            builder.Property(p => p.Valor).HasColumnType("decimal(10,2)").IsRequired();
         }
     }
 }

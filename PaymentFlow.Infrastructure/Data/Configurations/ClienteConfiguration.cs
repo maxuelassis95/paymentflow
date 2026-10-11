@@ -6,7 +6,7 @@ namespace PaymentFlow.Infrastructure.Data.Configurations
 {
 
     // Classe responsavel por separar as configurações da entidade do PaymentFlowContex, respeitando o conceito de responsabilidade unica
-    public class ClienteConfiugration : IEntityTypeConfiguration<Cliente>
+    public class ClienteConfiguration : IEntityTypeConfiguration<Cliente>
     {
         public void Configure(EntityTypeBuilder<Cliente> builder)
         {

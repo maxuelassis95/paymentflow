@@ -1,5 +1,4 @@
-﻿using System.Runtime.ConstrainedExecution;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PaymentFlow.Domain.Entities;
 
 namespace PaymentFlow.Infrastructure.Data
@@ -49,6 +48,9 @@ namespace PaymentFlow.Infrastructure.Data
             //    entity.Property(p => p.ClienteId).IsRequired();
             //    entity.Property(p => p.Valor).HasColumnType("decimal(10,2)").IsRequired();
             //});
+
+            // No lugar de deixar todas configurações aqui, criamos entidades separadas
+            // e o método abaixo busca todas essas configurations no Assembly
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(PaymentFlowContext).Assembly);
         }
 
