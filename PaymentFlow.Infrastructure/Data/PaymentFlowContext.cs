@@ -41,6 +41,7 @@ namespace PaymentFlow.Infrastructure.Data
                 entity.ToTable("pagamentos");
                 entity.HasKey(p => p.Id);
                 entity.Property(p => p.ClienteId).IsRequired();
+                entity.Property(p => p.Valor).HasColumnType("decimal(10,2)").IsRequired();
             });
         }
 
