@@ -11,5 +11,7 @@
             Email = email;
         }
 
+        public ICollection<Pagamento> Pagamentos { get; set; } = new List<Pagamento>();
+
     }
 }

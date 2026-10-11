@@ -3,22 +3,46 @@ using PaymentFlow.Domain.Entities;
 
 namespace PaymentFlow.Infrastructure.Data
 {
-    // Só conseguimos herdad DbContext porque adicionamos a biliotece Microsoft.EntityFrameworkCore
-    // No caso adicionamos a biblioteca Pomelo.EntityFrameworkCore.MySql, mas como ela precisa Microsoft.EntityFrameworkCore, 
-    //                  ela ja traz ela.
     public class PaymentFlowContext : DbContext
     {
 
-        // O construtor de PaymentFlowContext recebe um parâmetro chamado options, cujo tipo é DbContextOptions específico para PaymentFlowContext
-        // E repassa esse options para o construtor da classe base DbContext
+        // Construtor que ao ser instanciado vai receber como parametro DbContextOptions do tipo PaymentFlowContext
         public PaymentFlowContext(DbContextOptions<PaymentFlowContext> options) : base (options)
         {
 
         }
 
-        // propriedades que representam as tabelas do banco
+        // Propriedades que representam as tabelas
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Pagamento> Pagamentos { get; set; }
+
+        // Métodos responsavel por construir (build) as tabelas de acordo com as entidades
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // não constrói as tabela, ele configura o mapeamente entre as tabelas e as entidades - as migrations cria as tabelas
+            modelBuilder.Entity<Cliente>(entity =>
+            {
+                entity.ToTable("clientes");
+                // indica a chave primaria através de uma expressão lambda
+                entity.HasKey(c => c.Id);
+                // configura o campo Nome com as regras obrigatório com maximoa de 250 caracteres, lembrando que aqui não cria nada,
+                // apenas mapeia e configura as regras
+                entity.Property(c => c.Nome).IsRequired().HasMaxLength(255);
+
+
+                // 1 Cliente => N Pagamentos
+                entity.HasMany(c => c.Pagamentos)
+                      .WithOne(p => p.Cliente)
+                      .HasForeignKey(p => p.ClienteId)
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<Pagamento>(entity => {
+                entity.ToTable("pagamentos");
+                entity.HasKey(p => p.Id);
+                entity.Property(p => p.ClienteId).IsRequired();
+            });
+        }
 
     }
 }
