@@ -23,21 +23,8 @@ builder.Services.AddDbContext<PaymentFlowContext>(options =>
 
 var app = builder.Build();
 
-// Obtendo o Context após o build
-// O DbContext é registrado com escopo (scoped), então você não pode pegá-lo direto de app.Services
-
-using(var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<PaymentFlowContext>();
-
-    if(!await context.Database.CanConnectAsync())
-    {
-        throw new InvalidOperationException("Não foi possivel conectar ao banco de dados");
-    }
-}
-
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
     {
         app.MapOpenApi();
     }
