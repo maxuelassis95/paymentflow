@@ -22,7 +22,7 @@ namespace PaymentFlow.Infrastructure.Data.Configurations
                 .IsRequired();
 
             builder.Property(p => p.DataCriacao)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP(6)")
                 .ValueGeneratedOnAdd();
         }
     }

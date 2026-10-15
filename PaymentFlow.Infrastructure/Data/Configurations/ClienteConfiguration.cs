@@ -4,7 +4,7 @@ using PaymentFlow.Domain.Entities;
 
 namespace PaymentFlow.Infrastructure.Data.Configurations
 {
-    // Classe responsavel por mapear e configurar as as tabelas do banco de acordo com as entidades
+    // Classe responsavel por mapear e configurar as tabelas do banco de acordo com as entidades
     public class ClienteConfiguration : IEntityTypeConfiguration<Cliente>
     {
         public void Configure(EntityTypeBuilder<Cliente> builder)
@@ -20,7 +20,7 @@ namespace PaymentFlow.Infrastructure.Data.Configurations
                 .ValueGeneratedOnAdd();
 
             builder.Property(c => c.DataCriacao)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP(6)")
                 .ValueGeneratedOnAdd();
 
             builder.HasMany(c => c.Pagamentos)
