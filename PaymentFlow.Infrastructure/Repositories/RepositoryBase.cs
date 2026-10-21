@@ -8,38 +8,44 @@ namespace PaymentFlow.Infrastructure.Repositories
 {
     public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : EntidadeBase
     {
-        // campo que vai guardar a instancua do PaymentFlowContex qu vamos receber pelo construtor (passadas pelo Dependency Injection)
+        // campo responsavel por guardar a instancia do PaymentFlowContext que vamos receber pelo construtor fornecido pelo DI
         protected PaymentFlowContext _context;
-       
-        // necessário construtor para receber as informações do PaymentFlowContext registradas pelo DI
+
         public RepositoryBase(PaymentFlowContext context)
         {
             _context = context;
         }
 
-        public async Task AddAsync(TEntity entity)
+        public async Task AddAsync(TEntity entity, CancellationToken ct = default)
         {
-            // como nossa classe e método são genéricos precisamos saber o entitade e pra isso usamos Set<TEntity>()
-            await _context.Set<TEntity>().AddAsync(entity);
-            await _context.SaveChangesAsync();
+            await _context.Set<TEntity>() // por ser uma classe genérica, usamos o .Set<> para informar qual tabela vai ser usada, passando nele o TEntity 
+                .AddAsync(entity, ct);
+
+            await _context.SaveChangesAsync(ct); // momento que ocorre de fato a alteração no banco
         }
 
+        // AsNoTracking() deve ser usado para retorno de leitura, ele diz ao EF que não precisa deixar nada em Change Tracker
         public async Task<TEntity> GetAsync(int id, CancellationToken ct = default)
         {
-            return await _context.Set<TEntity>().FirstOrDefaultAsync(entity => entity.Id == id, ct);            
+            return await _context.Set<TEntity>()
+                .AsNoTracking()
+                .FirstOrDefaultAsync(entity => entity.Id == id, ct);
         }
 
-        public async Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken ct = default)
+        public async Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken ct = default) // Lembrar de inicialziar o CancellationToken com um valor default
         {
-            return await _context.Set<TEntity>().ToListAsync(ct);
+            return await _context.Set<TEntity>()
+                .AsNoTracking()
+                .ToListAsync(ct);
         }
-        
+
         public async Task<IReadOnlyList<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicated, CancellationToken ct = default)
         {
             return await _context.Set<TEntity>()
                 .AsNoTracking()
                 .Where(predicated)
-                .ToListAsync(ct);
+                .ToListAsync(ct);                
         }
+
     }
 }
