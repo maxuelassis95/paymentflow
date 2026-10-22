@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using PaymentFlow.Application.Services;
 using PaymentFlow.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,8 @@ builder.Services.AddDbContext<PaymentFlowContext>(options =>
         ServerVersion.AutoDetect(connectionString)
     )
 );
+
+builder.Services.AddScoped<ClienteService>();
 
 var app = builder.Build();
 

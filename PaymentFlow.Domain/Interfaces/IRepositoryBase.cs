@@ -5,7 +5,7 @@ namespace PaymentFlow.Domain.Interfaces
 {
     public interface IRepositoryBase<TEntity> where TEntity : EntidadeBase
     {
-        public Task AddAsync(TEntity entidade, CancellationToken ct);
+        public Task<bool> AddAsync(TEntity entidade, CancellationToken ct);
         public Task<TEntity> GetAsync(int id, CancellationToken ct);
         public Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken ct);
 

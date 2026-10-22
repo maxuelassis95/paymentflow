@@ -16,12 +16,14 @@ namespace PaymentFlow.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task AddAsync(TEntity entity, CancellationToken ct = default)
+        public async Task<bool> AddAsync(TEntity entity, CancellationToken ct = default)
         {
             await _context.Set<TEntity>() // por ser uma classe genérica, usamos o .Set<> para informar qual tabela vai ser usada, passando nele o TEntity 
                 .AddAsync(entity, ct);
 
-            await _context.SaveChangesAsync(ct); // momento que ocorre de fato a alteração no banco
+            var rows = await _context.SaveChangesAsync(ct); // momento que ocorre de fato a alteração no banco
+            
+            return rows > 0;
         }
 
         // AsNoTracking() deve ser usado para retorno de leitura, ele diz ao EF que não precisa deixar nada em Change Tracker
