@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using PaymentFlow.Domain.Interfaces;
 using PaymentFlow.Application.Services;
 using PaymentFlow.Infrastructure.Data;
+using PaymentFlow.Application.Interfaces;
+using PaymentFlow.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +25,11 @@ builder.Services.AddDbContext<PaymentFlowContext>(options =>
     )
 );
 
-builder.Services.AddScoped<ClienteService>();
+// Registra no container de injeção de dependencias o ClienteService .
+// Através da inversão de dependencia, quando o construtor receber a interface IClienteService ele vai referencia ao ClienteService.
+builder.Services.AddScoped<IClienteService, ClienteService>();
+
+builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 
 var app = builder.Build();
 
