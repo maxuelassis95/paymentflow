@@ -1,12 +1,13 @@
 ﻿using PaymentFlow.Domain.Interfaces;
 using PaymentFlow.Application.DTOs;
+using PaymentFlow.Application.Interfaces;
 using PaymentFlow.Domain.Entities;
 using PaymentFlow.Domain.Commons;
 using System.Reflection.Metadata.Ecma335;
 
 namespace PaymentFlow.Application.Services
 {
-    public class ClienteService
+    public class ClienteService : IClienteService
     {
         private readonly IClienteRepository _clienteRepository;
 
@@ -51,7 +52,7 @@ namespace PaymentFlow.Application.Services
         // Quando estudar: depois de dominar o fluxo Result na Service/Controller.
         // ============================================================
 
-        public async Task<Result> AdicionarAsync(ClienteRequestDTO request, CancellationToken ct)
+        public async Task<Result> CreateAsync(ClienteRequestDTO request, CancellationToken ct)
         {
             if(request is null)
             {

@@ -2,7 +2,9 @@
 
 namespace PaymentFlow.Application.Interfaces
 {
-    public interface IClienteService : IServiceBase<Cliente>
+
+    // A comunidade é bem clara em não usar genérics nas services IServiceBase<> e ServiceBase<> ..
+    public interface IClienteService
     {
 
     }
