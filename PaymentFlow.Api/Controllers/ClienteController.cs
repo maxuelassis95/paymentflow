@@ -22,9 +22,9 @@ namespace PaymentFlow.Api.Controllers
             _clienteService = clienteService;
         }
 
-        // Ver como usar o padrão de DTO para requests e responses
 
-        public async Task<IActionResult> AdicionarCliente([FromBody] ClienteRequestDTO request, CancellationToken ct)
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] ClienteRequestDTO request, CancellationToken ct)
         {
             if(request is null)
             {
