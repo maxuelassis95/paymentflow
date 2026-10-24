@@ -2,6 +2,7 @@
 using PaymentFlow.Application.Services;
 using PaymentFlow.Application.DTOs;
 using PaymentFlow.Domain.Commons;
+using PaymentFlow.Application.Interfaces;
 
 namespace PaymentFlow.Api.Controllers
 {
@@ -14,17 +15,17 @@ namespace PaymentFlow.Api.Controllers
     [Route("api/[controller]")]
     public class ClienteController : ControllerBase
     {
-        private readonly ClienteService _clienteService;
+        private readonly IClienteService _clienteService;
 
         // Após testes criar as interfaces das Services e ajustar o DI para consegir usar a interface
-        public ClienteController(ClienteService clienteService)
+        public ClienteController(IClienteService clienteService)
         {
             _clienteService = clienteService;
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] ClienteRequestDTO request, CancellationToken ct)
+        public async Task<IActionResult> Post([FromBody] ClienteRequestDTO request, CancellationToken ct = default)
         {
             if(request is null)
             {
@@ -43,7 +44,7 @@ namespace PaymentFlow.Api.Controllers
 
             try
             {
-                var resposta = await _clienteService.AdicionarAsync(request, ct);
+                var resposta = await _clienteService.CreateAsync(request, ct);
                 
                 if(!resposta.Sucesso)
                 {

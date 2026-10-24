@@ -3,7 +3,6 @@ using PaymentFlow.Application.DTOs;
 using PaymentFlow.Application.Interfaces;
 using PaymentFlow.Domain.Entities;
 using PaymentFlow.Domain.Commons;
-using System.Reflection.Metadata.Ecma335;
 
 namespace PaymentFlow.Application.Services
 {
@@ -52,7 +51,7 @@ namespace PaymentFlow.Application.Services
         // Quando estudar: depois de dominar o fluxo Result na Service/Controller.
         // ============================================================
 
-        public async Task<Result> CreateAsync(ClienteRequestDTO request, CancellationToken ct)
+        public async Task<Result> CreateAsync(ClienteRequestDTO request, CancellationToken ct = default)
         {
             if(request is null)
             {
@@ -69,6 +68,24 @@ namespace PaymentFlow.Application.Services
             return Result.Fail("Erro ao adicionar cliente");
             
         }
+
+        public async Task<Result<Cliente>> GetByIdAsync(int id, CancellationToken ct = default)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        // "Modo de falar": Uma operação assincrona que ao terminar retorna uma lista de Cliente somente de leitura
+        public async Task<Result<IReadOnlyList<Cliente>>> GetAllAsync(CancellationToken ct = default)
+        {
+            throw new NotImplementedException(); 
+        }
+
+        public Task<Result<IReadOnlyList<Cliente>>> FindByEmailAsync(string email, CancellationToken ct = default)
+        {
+            throw new NotImplementedException();
+        }
+
 
     }
 }
