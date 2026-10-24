@@ -58,9 +58,19 @@ namespace PaymentFlow.Application.Services
                 return Result.Fail("Cliente não existe");
             }
 
-            Cliente cliente = new Cliente(request.Nome, request.Email);
+            // Verifica se possui cliente com o email informado, para chama FindAsync() e passa o lambda que ele espera Expression<Func<Cliente, bool>>
+            var cliente = await _clienteRepository.FindAsync(c => c.Email == request.Email, ct);
 
-            if (await _clienteRepository.AddAsync(cliente, ct))
+            // Lembrar: cliente aqui retorna uma collection public async Task<IReadOnlyList<Cliente>>, então a vrifica deve ser consultando se a lista possui itens, como fiz.
+            // Quando tentamos if(cliente is not null) {} ele retornou erro, porque lista vazia não é objeto nulo
+            if(cliente.Count > 0)
+            {
+                return Result.Fail("Cliente já cadastrado em nosso sistema");
+            }
+
+            Cliente clienteNovo = new Cliente(request.Nome, request.Email);
+
+            if (await _clienteRepository.AddAsync(clienteNovo, ct))
             {
                 return Result.Ok();
             }

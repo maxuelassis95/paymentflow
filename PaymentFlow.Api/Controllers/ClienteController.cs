@@ -16,11 +16,15 @@ namespace PaymentFlow.Api.Controllers
     public class ClienteController : ControllerBase
     {
         private readonly IClienteService _clienteService;
+        
+        // Sempre é bom loggar os erros e tomar cuidado com o try/catch para não engolir o erro customizado
+        private readonly ILogger<ClienteController> _logger;
 
         // Após testes criar as interfaces das Services e ajustar o DI para consegir usar a interface
-        public ClienteController(IClienteService clienteService)
+        public ClienteController(IClienteService clienteService, ILogger<ClienteController> logger)
         {
             _clienteService = clienteService;
+            _logger = logger;
         }
 
 
@@ -48,7 +52,7 @@ namespace PaymentFlow.Api.Controllers
                 
                 if(!resposta.Sucesso)
                 {
-                    return BadRequest("Ocorreu um erro ao tentar adicionar um novo cliente");
+                    return BadRequest($"Ocorreu um erro: {resposta.Erro}");
                 }
 
                 return Ok("Cliente cadastrado com sucesso");
@@ -56,6 +60,7 @@ namespace PaymentFlow.Api.Controllers
             }
             catch(Exception e)
             {
+                _logger.LogError(e, "Erro ao criar cliente");
                 return Problem("Ocorreu um erro interno no servidor");
             }
 
