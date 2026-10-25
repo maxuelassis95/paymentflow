@@ -3,6 +3,7 @@ using PaymentFlow.Application.Services;
 using PaymentFlow.Application.DTOs;
 using PaymentFlow.Domain.Commons;
 using PaymentFlow.Application.Interfaces;
+using PaymentFlow.Domain.Entities;
 
 namespace PaymentFlow.Api.Controllers
 {
@@ -63,7 +64,12 @@ namespace PaymentFlow.Api.Controllers
                 _logger.LogError(e, "Erro ao criar cliente");
                 return Problem("Ocorreu um erro interno no servidor");
             }
+        }
 
+        [HttpGet]
+        public IActionResult GetEmail([FromQuery] string email)
+        {
+            return Ok(email);
         }
 
     }
