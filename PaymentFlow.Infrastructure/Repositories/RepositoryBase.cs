@@ -27,7 +27,7 @@ namespace PaymentFlow.Infrastructure.Repositories
         }
 
         // AsNoTracking() deve ser usado para retorno de leitura, ele diz ao EF que não precisa deixar nada em Change Tracker
-        public async Task<TEntity> GetAsync(int id, CancellationToken ct = default)
+        public async Task<TEntity> GetByIdAsync(int id, CancellationToken ct = default)
         {
             return await _context.Set<TEntity>()
                 .AsNoTracking()

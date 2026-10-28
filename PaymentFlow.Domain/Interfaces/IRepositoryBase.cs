@@ -6,7 +6,7 @@ namespace PaymentFlow.Domain.Interfaces
     public interface IRepositoryBase<TEntity> where TEntity : EntidadeBase
     {
         public Task<bool> AddAsync(TEntity entidade, CancellationToken ct);
-        public Task<TEntity> GetAsync(int id, CancellationToken ct);
+        public Task<TEntity> GetByIdAsync(int id, CancellationToken ct);
         public Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken ct);
 
         // Quando quer apenas os dados é recomendado não usar o List<TEntity> e sim IReadOnlyList ou IReadOnlyCollection;
