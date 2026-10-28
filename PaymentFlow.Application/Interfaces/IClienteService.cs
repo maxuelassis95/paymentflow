@@ -9,7 +9,7 @@ namespace PaymentFlow.Application.Interfaces
     public interface IClienteService
     {
         public Task<Result> CreateAsync(ClienteRequestDTO clienteDTO, CancellationToken ct);
-        public Task<Result<Cliente>> GetByIdAsync(int id, CancellationToken ct); 
+        public Task<Result<ClienteResponseDTO>> GetByIdAsync(int id, CancellationToken ct); 
         public Task<Result<IReadOnlyList<Cliente>>> GetAllAsync(CancellationToken ct);
         public Task<Result<ClienteResponseDTO>> GetByEmailAsync(string email, CancellationToken ct);
     }

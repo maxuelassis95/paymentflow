@@ -79,14 +79,34 @@ namespace PaymentFlow.Application.Services
             
         }
 
-        public async Task<Result<Cliente>> GetByIdAsync(int id, CancellationToken ct = default)
+        public async Task<Result<IReadOnlyList<Cliente>>> GetAllAsync(CancellationToken ct)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<IReadOnlyList<Cliente>>> GetAllAsync(CancellationToken ct)
+        public async Task<Result<ClienteResponseDTO>> GetByIdAsync(int id, CancellationToken ct)
         {
-            throw new NotImplementedException();
+            if (!(id > 0))
+            {
+                return Result<ClienteResponseDTO>.Fail("Id incorreto, digite um id válido");
+            }
+
+            var cliente = await _clienteRepository.GetByIdAsync(id, ct);
+
+            if (cliente is null)
+            {
+                return Result<ClienteResponseDTO>.Fail("Nenhum cliente foi encontrado com esse id");
+            }
+
+            var clienteDTO = new ClienteResponseDTO()
+            {
+                Nome = cliente.Nome,
+                Email = cliente.Email,
+                DataCriacao = cliente.DataCriacao,
+            };
+
+            return Result<ClienteResponseDTO>.Ok(clienteDTO);
+
         }
 
         public async Task<Result<ClienteResponseDTO>> GetByEmailAsync(string email, CancellationToken ct)

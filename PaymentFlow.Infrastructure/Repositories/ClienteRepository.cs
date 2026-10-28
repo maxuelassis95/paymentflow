@@ -61,7 +61,9 @@ namespace PaymentFlow.Infrastructure.Repositories
 
         public async Task<Cliente> GetByEmailAsync(string email, CancellationToken ct)
         {
-            return await _context.Clientes.FirstOrDefaultAsync(c => c.Email == email, ct);
+            return await _context.Clientes
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.Email == email, ct);
         }
 
     }
