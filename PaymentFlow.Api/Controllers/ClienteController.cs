@@ -67,10 +67,29 @@ namespace PaymentFlow.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetEmail([FromQuery] string email)
+        public async Task<IActionResult> GetEmailAsync([FromQuery] string email, CancellationToken ct)
         {
-            return Ok(email);
+            try
+            {
+                var cliente = await _clienteService.GetByEmailAsync(email, ct);
+                
+                if(cliente.Sucesso is not true)
+                {
+                    return BadRequest("Ocorreu um erro na busca, confere o email e tenta novamente mais tarde");
+                }
+
+                return Ok(cliente.Valor);
+                
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e, "Erro ao buscar cliente por email");
+                return BadRequest("Ocorreu um erro no servidor");
+            }
+
         }
+
+        
 
     }
 }

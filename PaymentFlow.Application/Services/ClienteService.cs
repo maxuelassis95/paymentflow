@@ -103,10 +103,13 @@ namespace PaymentFlow.Application.Services
                 return Result<ClienteResponseDTO>.Fail("Não exite cliente em nosso sistema com esse email");
             }
 
-            var clienteDTO = new ClienteResponseDTO();
-            clienteDTO.Nome = cliente.Nome;
-            clienteDTO.Email = cliente.Email;
-            clienteDTO.DataCriacao = cliente.DataCriacao;
+            var clienteDTO = new ClienteResponseDTO()
+            {
+                Nome = cliente.Nome,
+                Email = cliente.Email,
+                DataCriacao = cliente.DataCriacao
+            };
+            
 
             return Result<ClienteResponseDTO>.Ok(clienteDTO);
         }

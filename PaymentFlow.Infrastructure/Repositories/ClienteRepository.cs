@@ -45,7 +45,7 @@ namespace PaymentFlow.Infrastructure.Repositories
                 return false;
             }
 
-            await _context.Clientes.AddAsync(cliente);
+            await _context.Clientes.AddAsync(cliente, ct);
 
             try
             {
