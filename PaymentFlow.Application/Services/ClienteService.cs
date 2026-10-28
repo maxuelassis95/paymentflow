@@ -84,16 +84,26 @@ namespace PaymentFlow.Application.Services
             throw new NotImplementedException();
         }
 
-
-        // "Modo de falar": Uma operação assincrona que ao terminar retorna uma lista de Cliente somente de leitura
-        public async Task<Result<IReadOnlyList<Cliente>>> GetAllAsync(CancellationToken ct = default)
-        {
-            throw new NotImplementedException(); 
-        }
-
-        public Task<Result<IReadOnlyList<Cliente>>> FindByEmailAsync(string email, CancellationToken ct = default)
+        public async Task<Result<IReadOnlyList<Cliente>>> GetAllAsync(CancellationToken ct)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<Result<Cliente>> GetByEmailAsync(string email, CancellationToken ct)
+        {
+            if(String.IsNullOrWhiteSpace(email))
+            {
+                return Result<Cliente>.Fail("Email incorreto");
+            }
+
+            var cliente = await _clienteRepository.GetByEmailAsync(email, ct);
+
+            if(cliente is null)
+            {
+                return Result<Cliente>.Fail("Não exite cliente em nosso sistema com esse email");
+            }
+
+            return Result<Cliente>.Ok(cliente);
         }
 
 
