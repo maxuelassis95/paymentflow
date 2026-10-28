@@ -89,21 +89,26 @@ namespace PaymentFlow.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Result<Cliente>> GetByEmailAsync(string email, CancellationToken ct)
+        public async Task<Result<ClienteResponseDTO>> GetByEmailAsync(string email, CancellationToken ct)
         {
             if(String.IsNullOrWhiteSpace(email))
             {
-                return Result<Cliente>.Fail("Email incorreto");
+                return Result<ClienteResponseDTO>.Fail("Email incorreto");
             }
 
             var cliente = await _clienteRepository.GetByEmailAsync(email, ct);
 
             if(cliente is null)
             {
-                return Result<Cliente>.Fail("Não exite cliente em nosso sistema com esse email");
+                return Result<ClienteResponseDTO>.Fail("Não exite cliente em nosso sistema com esse email");
             }
 
-            return Result<Cliente>.Ok(cliente);
+            var clienteDTO = new ClienteResponseDTO();
+            clienteDTO.Nome = cliente.Nome;
+            clienteDTO.Email = cliente.Email;
+            clienteDTO.DataCriacao = cliente.DataCriacao;
+
+            return Result<ClienteResponseDTO>.Ok(clienteDTO);
         }
 
 
