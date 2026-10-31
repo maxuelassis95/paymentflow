@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PaymentFlow.Domain\PaymentFlow.Domain.csproj" />
+    <ProjectReference Include="..\PaymentFlow.Application\PaymentFlow.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>
