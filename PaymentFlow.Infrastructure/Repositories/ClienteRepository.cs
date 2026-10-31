@@ -10,12 +10,12 @@ namespace PaymentFlow.Infrastructure.Repositories
 {
     public class ClienteRepository : RepositoryBase<Cliente>, IClienteRepository
     {
-        private PaymentFlowContext _context;
+        //private PaymentFlowContext _context;
 
         // Construto recebendo o PaymentFlowContext do DI e passando para a classe mãe que herdamos.
         public ClienteRepository(PaymentFlowContext context) : base (context)
         {
-            _context = context;
+            
         }
 
 

@@ -17,7 +17,7 @@ namespace PaymentFlow.Api.Controllers
     public class ClienteController : ControllerBase
     {
         private readonly IClienteService _clienteService;
-        
+
         // Sempre é bom loggar os erros e tomar cuidado com o try/catch para não engolir o erro customizado
         private readonly ILogger<ClienteController> _logger;
 
@@ -32,17 +32,17 @@ namespace PaymentFlow.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] ClienteRequestDTO request, CancellationToken ct = default)
         {
-            if(request is null)
+            if (request is null)
             {
                 return BadRequest("Dados incompletos");
             }
 
-            if(String.IsNullOrEmpty(request.Nome))
+            if (String.IsNullOrEmpty(request.Nome))
             {
                 return BadRequest("Nome precisa estar preenchido");
             }
 
-            if(String.IsNullOrEmpty(request.Email))
+            if (String.IsNullOrEmpty(request.Email))
             {
                 return BadRequest("E-mail precisa esta preenchido");
             }
@@ -50,23 +50,44 @@ namespace PaymentFlow.Api.Controllers
             try
             {
                 var resposta = await _clienteService.CreateAsync(request, ct);
-                
-                if(!resposta.Sucesso)
+
+                if (!resposta.Sucesso)
                 {
                     return BadRequest($"Ocorreu um erro: {resposta.Erro}");
                 }
 
                 return Ok("Cliente cadastrado com sucesso");
-                
+
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logger.LogError(e, "Erro ao criar cliente");
                 return Problem("Ocorreu um erro interno no servidor");
             }
         }
 
-        [HttpGet]
+        [HttpGet("id")]
+        public async Task<IActionResult> GetByIdAsync([FromQuery] int id, CancellationToken ct)
+        {
+            try
+            {
+                var cliente = await _clienteService.GetByIdAsync(id, ct);
+
+                if(!cliente.Sucesso is true)
+                {
+                    return BadRequest(cliente.Erro);
+                }
+                
+                return Ok(cliente.Valor);
+            } 
+            catch(Exception e)
+            {
+                _logger.LogError(e, "Erro ao buscar cliente pelo Id ");
+                return Problem("Ocorreu um erro no servidor");
+            }
+        }
+
+        [HttpGet("email")]
         public async Task<IActionResult> GetEmailAsync([FromQuery] string email, CancellationToken ct)
         {
             try
@@ -75,7 +96,7 @@ namespace PaymentFlow.Api.Controllers
                 
                 if(cliente.Sucesso is not true)
                 {
-                    return BadRequest("Ocorreu um erro na busca, confere o email e tenta novamente mais tarde");
+                    return BadRequest(cliente.Erro);
                 }
 
                 return Ok(cliente.Valor);
