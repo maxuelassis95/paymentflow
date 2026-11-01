@@ -79,9 +79,19 @@ namespace PaymentFlow.Application.Services
             
         }
 
-        public async Task<Result<IReadOnlyList<Cliente>>> GetAllAsync(CancellationToken ct)
+        public async Task<Result<IReadOnlyList<ClienteResponseDTO>>> GetAllAsync(CancellationToken ct)
         {
-            throw new NotImplementedException();
+            var clientes = await _clienteRepository.GetAllAsync(ct);
+            var clientesDTOs = clientes.Select(c => new ClienteResponseDTO
+            {
+                Nome = c.Nome,
+                Email = c.Email,
+                DataCriacao = c.DataCriacao
+
+            }).ToList();
+
+            return Result<IReadOnlyList<ClienteResponseDTO>>.Ok(clientesDTOs);
+
         }
 
         public async Task<Result<ClienteResponseDTO>> GetByIdAsync(int id, CancellationToken ct)
