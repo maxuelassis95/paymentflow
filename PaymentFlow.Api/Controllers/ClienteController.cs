@@ -110,6 +110,21 @@ namespace PaymentFlow.Api.Controllers
 
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllAsync(CancellationToken ct)
+        {
+            try
+            {
+                var clientes = await _clienteService.GetAllAsync(ct);
+                return Ok(clientes.Valor);
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e, "Erro ao buscar todos os clientes");
+                return Problem("Erro interno do servidor");
+            }
+        }
+
         
 
     }
