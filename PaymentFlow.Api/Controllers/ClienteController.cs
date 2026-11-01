@@ -68,7 +68,7 @@ namespace PaymentFlow.Api.Controllers
         }
 
         [HttpGet("busca-id/{id}")]
-        public async Task<IActionResult> GetByIdAsync([FromRoute] int id, CancellationToken ct)
+        public async Task<ActionResult<ClienteResponseDTO>> GetByIdAsync([FromRoute] int id, CancellationToken ct)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace PaymentFlow.Api.Controllers
         }
 
         [HttpGet("busca-email/{email}")]
-        public async Task<IActionResult> GetEmailAsync([FromRoute] string email, CancellationToken ct)
+        public async Task<ActionResult<ClienteResponseDTO>> GetEmailAsync([FromRoute]string email, CancellationToken ct)
         {
             try
             {
@@ -112,7 +112,7 @@ namespace PaymentFlow.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync(CancellationToken ct)
+        public async Task<ActionResult<IReadOnlyList<ClienteResponseDTO>>> GetAllAsync(CancellationToken ct)
         {
             try
             {
