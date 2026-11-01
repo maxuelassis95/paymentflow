@@ -74,9 +74,9 @@ namespace PaymentFlow.Api.Controllers
             {
                 var cliente = await _clienteService.GetByIdAsync(id, ct);
 
-                if (!cliente.Sucesso is true)
+                if (cliente.Sucesso is not true)
                 {
-                    return BadRequest(cliente.Erro);
+                    return NotFound(cliente.Erro);
                 }
 
                 return Ok(cliente.Valor);
@@ -97,7 +97,7 @@ namespace PaymentFlow.Api.Controllers
                 
                 if(cliente.Sucesso is not true)
                 {
-                    return BadRequest(cliente.Erro);
+                    return NotFound(cliente.Erro);
                 }
 
                 return Ok(cliente.Valor);
@@ -106,7 +106,7 @@ namespace PaymentFlow.Api.Controllers
             catch(Exception e)
             {
                 _logger.LogError(e, "Erro ao buscar cliente por email");
-                return BadRequest("Ocorreu um erro no servidor");
+                return Problem("Ocorreu um erro no servidor");
             }
 
         }
