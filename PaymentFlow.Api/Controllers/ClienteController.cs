@@ -4,6 +4,7 @@ using PaymentFlow.Application.DTOs;
 using PaymentFlow.Domain.Commons;
 using PaymentFlow.Application.Interfaces;
 using PaymentFlow.Domain.Entities;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace PaymentFlow.Api.Controllers
 {
@@ -56,8 +57,8 @@ namespace PaymentFlow.Api.Controllers
                     return BadRequest($"Ocorreu um erro: {resposta.Erro}");
                 }
 
-                return Ok("Cliente cadastrado com sucesso");
-
+                return StatusCode(201, "Cliente cadastrado com sucesso");
+;
             }
             catch (Exception e)
             {
