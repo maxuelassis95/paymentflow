@@ -31,7 +31,7 @@ namespace PaymentFlow.Api.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] ClienteRequestDTO request, CancellationToken ct = default)
+        public async Task<IActionResult> PostAsync([FromBody] ClienteRequestDTO request, CancellationToken ct = default)
         {
             if (request is null)
             {
@@ -58,7 +58,7 @@ namespace PaymentFlow.Api.Controllers
                 }
 
                 return StatusCode(201, "Cliente cadastrado com sucesso");
-;
+                ;
             }
             catch (Exception e)
             {
@@ -67,29 +67,29 @@ namespace PaymentFlow.Api.Controllers
             }
         }
 
-        [HttpGet("id")]
-        public async Task<IActionResult> GetByIdAsync([FromQuery] int id, CancellationToken ct)
+        [HttpGet("busca-id/{id}")]
+        public async Task<IActionResult> GetByIdAsync([FromRoute] int id, CancellationToken ct)
         {
             try
             {
                 var cliente = await _clienteService.GetByIdAsync(id, ct);
 
-                if(!cliente.Sucesso is true)
+                if (!cliente.Sucesso is true)
                 {
                     return BadRequest(cliente.Erro);
                 }
-                
+
                 return Ok(cliente.Valor);
-            } 
-            catch(Exception e)
+            }
+            catch (Exception e)
             {
                 _logger.LogError(e, "Erro ao buscar cliente pelo Id ");
                 return Problem("Ocorreu um erro no servidor");
             }
         }
 
-        [HttpGet("email")]
-        public async Task<IActionResult> GetEmailAsync([FromQuery] string email, CancellationToken ct)
+        [HttpGet("busca-email/{email}")]
+        public async Task<IActionResult> GetEmailAsync([FromRoute] string email, CancellationToken ct)
         {
             try
             {
