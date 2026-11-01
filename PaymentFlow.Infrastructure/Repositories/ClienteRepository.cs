@@ -37,7 +37,7 @@ namespace PaymentFlow.Infrastructure.Repositories
         // Pomelo (MySQL), a exceção interna é MySqlException com Number = 1062 (Duplicate entry).
         // O catch abaixo captura esse caso residual e devolve o mesmo retorno amigável da
         // verificação prévia, sem vazar exceção para o usuário.
-        public async Task<bool> AddAsync(Cliente cliente, CancellationToken ct = default)
+        public override async Task<bool> AddAsync(Cliente cliente, CancellationToken ct = default)
         {
             var conta = await FindAsync(c => c.Email == cliente.Email, ct);
             if (conta.Count > 0)

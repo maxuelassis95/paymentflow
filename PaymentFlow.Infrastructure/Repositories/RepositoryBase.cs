@@ -16,7 +16,8 @@ namespace PaymentFlow.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<bool> AddAsync(TEntity entity, CancellationToken ct = default)
+        // virtual porque vamos sobrescrelo na ClienteRepository pois precisamos de regras inidividuais (Poilimorfismo)
+        public virtual async Task<bool> AddAsync(TEntity entity, CancellationToken ct = default)
         {
             await _context.Set<TEntity>() // por ser uma classe genérica, usamos o .Set<> para informar qual tabela vai ser usada, passando nele o TEntity 
                 .AddAsync(entity, ct);
