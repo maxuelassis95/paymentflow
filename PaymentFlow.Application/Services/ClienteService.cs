@@ -59,11 +59,8 @@ namespace PaymentFlow.Application.Services
                 return Result<ClienteResponseDTO>.Fail("Cliente não existe", TiposErro.NotFound);
             }
 
-            // Verifica se possui cliente com o email informado, para chama FindAsync() e passa o lambda que ele espera Expression<Func<Cliente, bool>>
             var cliente = await _clienteRepository.FindAsync(c => c.Email == request.Email, ct);
 
-            // Lembrar: cliente aqui retorna uma collection public async Task<IReadOnlyList<Cliente>>, então a vrifica deve ser consultando se a lista possui itens, como fiz.
-            // Quando tentamos if(cliente is not null) {} ele retornou erro, porque lista vazia não é objeto nulo
             if(cliente.Count > 0)
             {
                 return Result<ClienteResponseDTO>.Fail("Cliente já cadastrado em nosso sistema", TiposErro.Conflict);
@@ -73,7 +70,9 @@ namespace PaymentFlow.Application.Services
 
             if (await _clienteRepository.AddAsync(clienteNovo, ct))
             {
-                return Result<ClienteResponseDTO>.Ok(null);
+                var response = new ClienteResponseDTO(clienteNovo.Nome, clienteNovo.Email, clienteNovo.DataCriacao);
+
+                return Result<ClienteResponseDTO>.Ok(response);
             }
 
             return Result<ClienteResponseDTO>.Fail("Erro ao adicionar cliente", TiposErro.BadRequest);

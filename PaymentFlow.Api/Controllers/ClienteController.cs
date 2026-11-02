@@ -56,7 +56,7 @@ namespace PaymentFlow.Api.Controllers
                     return RetornaTipoErro(resposta.TipoErro ?? TiposErro.Problem, resposta.Erro);
                 }
 
-                return StatusCode(201, "Cliente cadastrado com sucesso");
+                return StatusCode(201, resposta.Valor);
                 
             }
             catch (Exception e)
