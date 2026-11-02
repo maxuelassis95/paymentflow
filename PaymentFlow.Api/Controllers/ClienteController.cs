@@ -5,6 +5,7 @@ using PaymentFlow.Domain.Commons;
 using PaymentFlow.Application.Interfaces;
 using PaymentFlow.Domain.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
+using PaymentFlow.Domain.Enums;
 
 namespace PaymentFlow.Api.Controllers
 {
@@ -22,16 +23,14 @@ namespace PaymentFlow.Api.Controllers
         // Sempre é bom loggar os erros e tomar cuidado com o try/catch para não engolir o erro customizado
         private readonly ILogger<ClienteController> _logger;
 
-        // Após testes criar as interfaces das Services e ajustar o DI para consegir usar a interface
         public ClienteController(IClienteService clienteService, ILogger<ClienteController> logger)
         {
             _clienteService = clienteService;
             _logger = logger;
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] ClienteRequestDTO request, CancellationToken ct = default)
+        public async Task<ActionResult<ClienteResponseDTO>> PostAsync([FromBody] ClienteRequestDTO request, CancellationToken ct = default)
         {
             if (request is null)
             {
@@ -54,11 +53,11 @@ namespace PaymentFlow.Api.Controllers
 
                 if (!resposta.Sucesso)
                 {
-                    return BadRequest($"Ocorreu um erro: {resposta.Erro}");
+                    return RetornaTipoErro(resposta.TipoErro ?? TiposErro.Problem, resposta.Erro);
                 }
 
                 return StatusCode(201, "Cliente cadastrado com sucesso");
-                ;
+                
             }
             catch (Exception e)
             {
@@ -76,7 +75,7 @@ namespace PaymentFlow.Api.Controllers
 
                 if (cliente.Sucesso is not true)
                 {
-                    return NotFound(cliente.Erro);
+                    return RetornaTipoErro(cliente.TipoErro ?? TiposErro.Problem, cliente.Erro);
                 }
 
                 return Ok(cliente.Valor);
@@ -97,7 +96,7 @@ namespace PaymentFlow.Api.Controllers
                 
                 if(cliente.Sucesso is not true)
                 {
-                    return NotFound(cliente.Erro);
+                    return RetornaTipoErro(cliente.TipoErro ??TiposErro.Problem, cliente.Erro);
                 }
 
                 return Ok(cliente.Valor);
@@ -126,7 +125,24 @@ namespace PaymentFlow.Api.Controllers
             }
         }
 
-        
+        private ActionResult<ClienteResponseDTO> RetornaTipoErro(TiposErro tipoErro, string mensagem)
+        {
+            switch(tipoErro)
+            {
+                case TiposErro.BadRequest:
+                    return BadRequest(mensagem);
+
+                case TiposErro.NotFound:
+                    return NotFound(mensagem);
+
+                case TiposErro.Conflict:
+                    return Conflict(mensagem);
+
+                default:
+                    return Problem(mensagem);
+            }
+
+        }
 
     }
 }

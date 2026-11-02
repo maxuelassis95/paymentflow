@@ -3,6 +3,7 @@ using PaymentFlow.Application.DTOs;
 using PaymentFlow.Application.Interfaces;
 using PaymentFlow.Domain.Entities;
 using PaymentFlow.Domain.Commons;
+using PaymentFlow.Domain.Enums;
 
 namespace PaymentFlow.Application.Services
 {
@@ -51,11 +52,11 @@ namespace PaymentFlow.Application.Services
         // Quando estudar: depois de dominar o fluxo Result na Service/Controller.
         // ============================================================
 
-        public async Task<Result> CreateAsync(ClienteRequestDTO request, CancellationToken ct = default)
+        public async Task<Result<ClienteResponseDTO>> CreateAsync(ClienteRequestDTO request, CancellationToken ct = default)
         {
             if(request is null)
             {
-                return Result.Fail("Cliente não existe");
+                return Result<ClienteResponseDTO>.Fail("Cliente não existe", TiposErro.NotFound);
             }
 
             // Verifica se possui cliente com o email informado, para chama FindAsync() e passa o lambda que ele espera Expression<Func<Cliente, bool>>
@@ -65,17 +66,17 @@ namespace PaymentFlow.Application.Services
             // Quando tentamos if(cliente is not null) {} ele retornou erro, porque lista vazia não é objeto nulo
             if(cliente.Count > 0)
             {
-                return Result.Fail("Cliente já cadastrado em nosso sistema");
+                return Result<ClienteResponseDTO>.Fail("Cliente já cadastrado em nosso sistema", TiposErro.Conflict);
             }
 
             Cliente clienteNovo = new Cliente(request.Nome, request.Email);
 
             if (await _clienteRepository.AddAsync(clienteNovo, ct))
             {
-                return Result.Ok();
+                return Result<ClienteResponseDTO>.Ok(null);
             }
 
-            return Result.Fail("Erro ao adicionar cliente");
+            return Result<ClienteResponseDTO>.Fail("Erro ao adicionar cliente", TiposErro.BadRequest);
             
         }
 
@@ -98,14 +99,14 @@ namespace PaymentFlow.Application.Services
         {
             if (!(id > 0))
             {
-                return Result<ClienteResponseDTO>.Fail("Id incorreto, digite um id válido");
+                return Result<ClienteResponseDTO>.Fail("Id incorreto, digite um id válido", TiposErro.BadRequest);
             }
 
             var cliente = await _clienteRepository.GetByIdAsync(id, ct);
 
             if (cliente is null)
             {
-                return Result<ClienteResponseDTO>.Fail("Nenhum cliente foi encontrado com esse id");
+                return Result<ClienteResponseDTO>.Fail("Nenhum cliente foi encontrado com esse id", TiposErro.NotFound);
             }
 
             var clienteDTO = new ClienteResponseDTO()
@@ -123,14 +124,14 @@ namespace PaymentFlow.Application.Services
         {
             if(String.IsNullOrWhiteSpace(email))
             {
-                return Result<ClienteResponseDTO>.Fail("Email incorreto");
+                return Result<ClienteResponseDTO>.Fail("Email incorreto", TiposErro.BadRequest);
             }
 
             var cliente = await _clienteRepository.GetByEmailAsync(email, ct);
 
             if(cliente is null)
             {
-                return Result<ClienteResponseDTO>.Fail("Não exite cliente em nosso sistema com esse email");
+                return Result<ClienteResponseDTO>.Fail("Não exite cliente em nosso sistema com esse email", TiposErro.NotFound);
             }
 
             var clienteDTO = new ClienteResponseDTO()

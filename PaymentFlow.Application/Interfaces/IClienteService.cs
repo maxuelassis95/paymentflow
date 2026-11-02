@@ -8,7 +8,7 @@ namespace PaymentFlow.Application.Interfaces
     // A comunidade é bem clara em não usar genérics nas services IServiceBase<> e ServiceBase<> ..
     public interface IClienteService
     {
-        public Task<Result> CreateAsync(ClienteRequestDTO clienteDTO, CancellationToken ct);
+        public Task<Result<ClienteResponseDTO>> CreateAsync(ClienteRequestDTO clienteDTO, CancellationToken ct);
         public Task<Result<ClienteResponseDTO>> GetByIdAsync(int id, CancellationToken ct); 
         public Task<Result<IReadOnlyList<ClienteResponseDTO>>> GetAllAsync(CancellationToken ct);
         public Task<Result<ClienteResponseDTO>> GetByEmailAsync(string email, CancellationToken ct);
